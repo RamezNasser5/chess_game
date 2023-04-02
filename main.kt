@@ -22,37 +22,40 @@ fun main() {
         if (checkPlayer % 2 == 0) {
             println(message = "$firstName's turn:")
 
-            //firstMove variable is the first player move
-            val firstMove = readln()
-            if(firstMove == "exit") {
+            //firstPlayerMove variable is the first player move
+            val firstPlayerMove = readln()
+            if (firstPlayerMove == "exit") {
                 println("Bye!")
                 break
-            }
-            else {
+            } else {
                 regex = Regex("[a-h][1-8][a-h][1-8]")
-                if (regex.matches(firstMove)) {
-                    chess.editForm(firstMove)
-                    chess.drawChess()
+                if (regex.matches(firstPlayerMove)) {
+                    if (chess.pieceMoving(firstPlayerMove)) {
+                        chess.drawChess()
+                    }
+                    else
+                    {
+                        continue
+                    }
                     checkPlayer++
                 } else {
                     println("Invalid Input")
                 }
             }
-        }
-        else {
+        } else {
             println("$secondName's turn:")
 
-            //secondMove variable is the second player move
-            val secondMove = readln()
-            if(secondMove == "exit") {
+            //secondPlayerMove variable is the second player move
+            val secondPlayerMove = readln()
+            if (secondPlayerMove == "exit") {
                 println("Bye!")
                 break
-            }
-            else {
+            } else {
                 regex = Regex("[a-h][1-8][a-h][1-8]")
-                if (regex.matches(secondMove)) {
-                    chess.editForm(secondMove)
-                    chess.drawChess()
+                if (regex.matches(secondPlayerMove)) {
+                    if (chess.pieceMoving(secondPlayerMove)) {
+                        chess.drawChess()
+                    }
                     checkPlayer++
                 } else {
                     println("Invalid Input")

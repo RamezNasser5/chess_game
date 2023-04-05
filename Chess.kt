@@ -2,6 +2,7 @@ class Chess {
 
     //this a mutable list to store a strings to draw chess form
     private var rows: MutableList<String>
+    private var checkValidation: Boolean
 
     //this constructor to initialize the private mutable list rows
     init {
@@ -12,12 +13,12 @@ class Chess {
             "6 |   |   |   |   |   |   |   |   |","7 | B | B | B | B | B | B | B | B |",
             "8 |   |   |   |   |   |   |   |   |"
         )
+        checkValidation = true
     }
 
     //function drawChess use to draw the shape of chess
     fun drawChess()
     {
-        //print("\u001b[H\u001b[2J")
         for (i in 8 downTo 0)
         {
             println("  +---+---+---+---+---+---+---+---+")
@@ -25,58 +26,106 @@ class Chess {
         }
     }
 
-    //function editForm use to move on piece to another in chess game
-    fun editForm(expression: String) {
+    //checkMovePawnValidation function to check the validation of pawn piece moving while
+    private fun checkMovePawnValidation(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Int): Boolean {
+        if (this.rows[beforeMove][indexOfPiece] == ' ' && checkPlayer % 2 != 0){
+            println("No black pawn at ${expression[0]}$beforeMove")
+            return false
+        }
+        else if (this.rows[beforeMove][indexOfPiece] == ' ' && checkPlayer % 2 == 0){
+            println("No white pawn at ${expression[0]}$beforeMove")
+            return false
+        }
+        else if (expression[0] != expression[2]){
+            println("Invalid Input")
+            return false
+        }
+        else if (this.rows[beforeMove][indexOfPiece] == 'W'){
+            return if (beforeMove == 2 && afterMove == 4 || beforeMove == afterMove-1){
+                true
+            } else {
+                println("Invalid Input")
+                false
+            }
+        }
+        else if (this.rows[beforeMove][indexOfPiece] == 'B'){
+            return if (beforeMove == 7 && afterMove == 5 || beforeMove == afterMove+1){
+                true
+            } else {
+                println("Invalid Input")
+                false
+            }
+        }
+        return false
+    }
+
+    //accessToPiece function use to reach to the piece we want to move it
+    private fun accessToPiece(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Int): Boolean {
+
+        //if statement to check the validation of piece moving while moving from empty place or moving to wrong place
+        if (checkMovePawnValidation(expression,beforeMove, afterMove, indexOfPiece,checkPlayer))
+        {
+            checkValidation = true
+            this.rows[afterMove] = """${
+                this.rows[afterMove].substring(
+                    0,
+                    indexOfPiece
+                )
+            }${this.rows[beforeMove][indexOfPiece]}${this.rows[afterMove].substring(indexOfPiece + 1)}""".trimMargin()
+            this.rows[beforeMove] = """${
+                this.rows[beforeMove].substring(
+                    0,
+                    indexOfPiece
+                )
+            } ${this.rows[beforeMove].substring(indexOfPiece + 1)}""".trimMargin()
+        }
+        else {
+            checkValidation = false
+        }
+        return checkValidation
+    }
+
+    //function pieceMoving use to move on piece to another in chess game
+    fun pieceMoving(expression: String,checkPlayer: Int): Boolean {
 
         //beforeMove is a variable store a row number to move a piece from it to afterMove row
         val beforeMove = expression[1].code -48
         val afterMove = expression[3].code-48
 
-        //when use to access a piece in beforeMove row and move it to afterMove row
+        //when statement use to access a piece in beforeMove row and move it to afterMove row
         when(expression[0]) {
             'a' -> {
-              this.rows[afterMove] = this.rows[afterMove].substring(0, 4) + this.rows[beforeMove][4] + this.rows[afterMove].substring(5)
-              this.rows[beforeMove] = this.rows[beforeMove].substring(0, 4) + " " + this.rows[beforeMove].substring(5)
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,4,checkPlayer)
             }
 
             'b' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 8) + this.rows[beforeMove][8] + this.rows[afterMove].substring(9)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 8) + " " + this.rows[beforeMove].substring(9)
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,8,checkPlayer)
             }
 
             'c' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 12) + this.rows[beforeMove][12] + this.rows[afterMove].substring(13)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 12) + " " + this.rows[beforeMove].substring(13)
-
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,12,checkPlayer)
             }
 
             'd' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 16) + this.rows[beforeMove][16] + this.rows[afterMove].substring(17)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 16) + " " + this.rows[beforeMove].substring(17)
-
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,16,checkPlayer)
             }
 
             'e' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 20) + this.rows[beforeMove][20] + this.rows[afterMove].substring(21)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 20) + " " + this.rows[beforeMove].substring(21)
-
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,20,checkPlayer)
             }
 
             'f' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 24) + this.rows[beforeMove][24] + this.rows[afterMove].substring(25)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 24) + " " + this.rows[beforeMove].substring(25)
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,24,checkPlayer)
             }
 
             'g' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 28) + this.rows[beforeMove][28] + this.rows[afterMove].substring(29)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 28) + " " + this.rows[beforeMove].substring(29)
-
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,28,checkPlayer)
             }
 
             'h' -> {
-                this.rows[afterMove] = this.rows[afterMove].substring(0, 32) + this.rows[beforeMove][32] + this.rows[afterMove].substring(33)
-                this.rows[beforeMove] = this.rows[beforeMove].substring(0, 32) + " " + this.rows[beforeMove].substring(33)
+                checkValidation = accessToPiece(expression,beforeMove,afterMove,32,checkPlayer)
             }
         }
+        return checkValidation
     }
 }

@@ -27,12 +27,12 @@ class Chess {
     }
 
     //checkMovePawnValidation function to check the validation of pawn piece moving while
-    private fun checkMovePawnValidation(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Int): Boolean {
-        if (this.rows[beforeMove][indexOfPiece] == ' ' && checkPlayer % 2 != 0){
+    private fun checkMovePawnValidation(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Boolean): Boolean {
+        if (this.rows[beforeMove][indexOfPiece] == ' ' && !checkPlayer){
             println("No black pawn at ${expression[0]}$beforeMove")
             return false
         }
-        else if (this.rows[beforeMove][indexOfPiece] == ' ' && checkPlayer % 2 == 0){
+        else if (this.rows[beforeMove][indexOfPiece] == ' ' && checkPlayer){
             println("No white pawn at ${expression[0]}$beforeMove")
             return false
         }
@@ -60,7 +60,7 @@ class Chess {
     }
 
     //accessToPiece function use to reach to the piece we want to move it
-    private fun accessToPiece(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Int): Boolean {
+    private fun accessToPiece(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Boolean): Boolean {
 
         //if statement to check the validation of piece moving while moving from empty place or moving to wrong place
         if (checkMovePawnValidation(expression,beforeMove, afterMove, indexOfPiece,checkPlayer))
@@ -86,7 +86,7 @@ class Chess {
     }
 
     //function pieceMoving use to move on piece to another in chess game
-    fun pieceMoving(expression: String,checkPlayer: Int): Boolean {
+    fun pieceMoving(expression: String,checkPlayer: Boolean): Boolean {
 
         //beforeMove is a variable store a row number to move a piece from it to afterMove row
         val beforeMove = expression[1].code -48

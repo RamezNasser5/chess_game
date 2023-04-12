@@ -13,18 +13,18 @@ fun main() {
     chess.drawChess()
 
     //checkPlayer use to switch between two players
-    var checkPlayer = 0
+    var checkPlayer = true
 
     //firstPlayerMove variable is the first player move
-    var firstPlayerMove: String
+    var firstPlayerMove = "true"
 
     //secondPlayerMove variable is the second player move
-    var secondPlayerMove: String
+    var secondPlayerMove = "true"
 
     //regex variable use to check the validation of player move
     var regex: Regex
-    while (true) {
-        if (checkPlayer % 2 == 0) {
+    while (firstPlayerMove != "exit" || secondPlayerMove != "exit") {
+        if (checkPlayer) {
             println(message = "$firstName's turn:")
 
             firstPlayerMove = readln()
@@ -35,7 +35,7 @@ fun main() {
                 regex = Regex("[a-h][1-8][a-h][1-8]")
                 if (regex.matches(firstPlayerMove)) {
                     if (chess.pieceMoving(firstPlayerMove,checkPlayer)) {
-                        checkPlayer++
+                        checkPlayer = false
                         chess.drawChess()
                     }
                 } else {
@@ -54,7 +54,7 @@ fun main() {
                 regex = Regex("[a-h][1-8][a-h][1-8]")
                 if (regex.matches(secondPlayerMove)) {
                     if (chess.pieceMoving(secondPlayerMove,checkPlayer)) {
-                        checkPlayer++
+                        checkPlayer = true
                         chess.drawChess()
                     }
                 } else {

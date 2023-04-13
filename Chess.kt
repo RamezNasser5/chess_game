@@ -32,7 +32,22 @@ class Chess {
     private fun checkMovePawnValidation(
         expression: String,beforeMove: Int, afterMove: Int, beforeMoveIndexPiece: Int, afterMoveIndexPiece: Int,checkPlayer: Boolean
     ): Boolean {
-        if (checkPlayer && this.rows[beforeMove][beforeMoveIndexPiece] == 'B')
+        if (expression[0] != expression[2]){
+            return if (checkPlayer && this.rows[afterMove][afterMoveIndexPiece] == 'B' && abs(afterMoveIndexPiece-beforeMoveIndexPiece) == 4)
+                true
+            else if (!checkPlayer && this.rows[afterMove][afterMoveIndexPiece] == 'W' && abs(afterMoveIndexPiece-beforeMoveIndexPiece) == 4)
+                true
+            else {
+                println("Invalid Input")
+                false
+            }
+
+        }
+        else if (this.rows[afterMove][afterMoveIndexPiece] != ' '){
+            println("Invalid Input")
+            return false
+        }
+        else if (checkPlayer && this.rows[beforeMove][beforeMoveIndexPiece] == 'B')
         {
             println("No white pawn at ${expression[0]}$beforeMove")
             return false
@@ -49,16 +64,6 @@ class Chess {
         else if (this.rows[beforeMove][beforeMoveIndexPiece] == ' ' && checkPlayer){
             println("No white pawn at ${expression[0]}$beforeMove")
             return false
-        }
-        else if (expression[0] != expression[2]){
-            return if (checkPlayer && this.rows[afterMove][afterMoveIndexPiece] == 'B' && abs(afterMove-beforeMove) == 1) true
-            else if (!checkPlayer && this.rows[afterMove][afterMoveIndexPiece] == 'W' && abs(afterMove-beforeMove) == 1) {
-                true
-            } else {
-                println("Invalid Input")
-                false
-            }
-
         }
         else if (this.rows[beforeMove][beforeMoveIndexPiece] == 'W'){
             return if (beforeMove == 2 && afterMove == 4 || beforeMove == afterMove-1){

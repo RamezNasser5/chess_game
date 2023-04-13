@@ -1,3 +1,5 @@
+import kotlin.math.abs
+
 class Chess {
 
     //this a mutable list to store a strings to draw chess form
@@ -27,20 +29,38 @@ class Chess {
     }
 
     //checkMovePawnValidation function to check the validation of pawn piece moving while
-    private fun checkMovePawnValidation(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Boolean): Boolean {
-        if (this.rows[beforeMove][indexOfPiece] == ' ' && !checkPlayer){
+    private fun checkMovePawnValidation(
+        expression: String,beforeMove: Int, afterMove: Int, beforeMoveIndexPiece: Int, afterMoveIndexPiece: Int,checkPlayer: Boolean
+    ): Boolean {
+        if (checkPlayer && this.rows[beforeMove][beforeMoveIndexPiece] == 'B')
+        {
+            println("No white pawn at ${expression[0]}$beforeMove")
+            return false
+        }
+        else if (!checkPlayer && this.rows[beforeMove][beforeMoveIndexPiece] == 'W')
+        {
             println("No black pawn at ${expression[0]}$beforeMove")
             return false
         }
-        else if (this.rows[beforeMove][indexOfPiece] == ' ' && checkPlayer){
+        if (this.rows[beforeMove][beforeMoveIndexPiece] == ' ' && !checkPlayer){
+            println("No black pawn at ${expression[0]}$beforeMove")
+            return false
+        }
+        else if (this.rows[beforeMove][beforeMoveIndexPiece] == ' ' && checkPlayer){
             println("No white pawn at ${expression[0]}$beforeMove")
             return false
         }
         else if (expression[0] != expression[2]){
-            println("Invalid Input")
-            return false
+            return if (checkPlayer && this.rows[afterMove][afterMoveIndexPiece] == 'B' && abs(afterMove-beforeMove) == 1) true
+            else if (!checkPlayer && this.rows[afterMove][afterMoveIndexPiece] == 'W' && abs(afterMove-beforeMove) == 1) {
+                true
+            } else {
+                println("Invalid Input")
+                false
+            }
+
         }
-        else if (this.rows[beforeMove][indexOfPiece] == 'W'){
+        else if (this.rows[beforeMove][beforeMoveIndexPiece] == 'W'){
             return if (beforeMove == 2 && afterMove == 4 || beforeMove == afterMove-1){
                 true
             } else {
@@ -48,7 +68,7 @@ class Chess {
                 false
             }
         }
-        else if (this.rows[beforeMove][indexOfPiece] == 'B'){
+        else if (this.rows[beforeMove][beforeMoveIndexPiece] == 'B'){
             return if (beforeMove == 7 && afterMove == 5 || beforeMove == afterMove+1){
                 true
             } else {
@@ -60,24 +80,26 @@ class Chess {
     }
 
     //accessToPiece function use to reach to the piece we want to move it
-    private fun accessToPiece(expression: String,beforeMove: Int, afterMove: Int, indexOfPiece: Int,checkPlayer: Boolean): Boolean {
+    private fun accessToPiece(
+        expression: String,beforeMove: Int, afterMove: Int, beforeMoveIndexPiece: Int, afterMoveIndexPiece: Int,checkPlayer: Boolean
+    ): Boolean {
 
         //if statement to check the validation of piece moving while moving from empty place or moving to wrong place
-        if (checkMovePawnValidation(expression,beforeMove, afterMove, indexOfPiece,checkPlayer))
+        if (checkMovePawnValidation(expression,beforeMove, afterMove, beforeMoveIndexPiece, afterMoveIndexPiece,checkPlayer))
         {
             checkValidation = true
             this.rows[afterMove] = """${
                 this.rows[afterMove].substring(
                     0,
-                    indexOfPiece
+                    afterMoveIndexPiece
                 )
-            }${this.rows[beforeMove][indexOfPiece]}${this.rows[afterMove].substring(indexOfPiece + 1)}""".trimMargin()
+            }${this.rows[beforeMove][beforeMoveIndexPiece]}${this.rows[afterMove].substring(afterMoveIndexPiece + 1)}""".trimMargin()
             this.rows[beforeMove] = """${
                 this.rows[beforeMove].substring(
                     0,
-                    indexOfPiece
+                    beforeMoveIndexPiece
                 )
-            } ${this.rows[beforeMove].substring(indexOfPiece + 1)}""".trimMargin()
+            } ${this.rows[beforeMove].substring(beforeMoveIndexPiece + 1)}""".trimMargin()
         }
         else {
             checkValidation = false
@@ -91,41 +113,76 @@ class Chess {
         //beforeMove is a variable store a row number to move a piece from it to afterMove row
         val beforeMove = expression[1].code -48
         val afterMove = expression[3].code-48
+        var beforeMoveIndexPiece = 0
+        var afterMoveIndexPiece = 0
 
         //when statement use to access a piece in beforeMove row and move it to afterMove row
         when(expression[0]) {
             'a' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,4,checkPlayer)
+                beforeMoveIndexPiece = 4
             }
 
             'b' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,8,checkPlayer)
+                beforeMoveIndexPiece = 8
             }
 
             'c' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,12,checkPlayer)
+                beforeMoveIndexPiece = 12
             }
 
             'd' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,16,checkPlayer)
+                beforeMoveIndexPiece = 16
             }
 
             'e' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,20,checkPlayer)
+                beforeMoveIndexPiece = 20
             }
 
             'f' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,24,checkPlayer)
+                beforeMoveIndexPiece = 24
             }
 
             'g' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,28,checkPlayer)
+                beforeMoveIndexPiece = 28
             }
 
             'h' -> {
-                checkValidation = accessToPiece(expression,beforeMove,afterMove,32,checkPlayer)
+                beforeMoveIndexPiece = 32
             }
         }
-        return checkValidation
+        when(expression[2]) {
+            'a' -> {
+                afterMoveIndexPiece = 4
+            }
+
+            'b' -> {
+                afterMoveIndexPiece = 8
+            }
+
+            'c' -> {
+                afterMoveIndexPiece = 12
+            }
+
+            'd' -> {
+                afterMoveIndexPiece = 16
+            }
+
+            'e' -> {
+                afterMoveIndexPiece = 20
+            }
+
+            'f' -> {
+                afterMoveIndexPiece = 24
+            }
+
+            'g' -> {
+                afterMoveIndexPiece = 28
+            }
+
+            'h' -> {
+                afterMoveIndexPiece = 32
+            }
+        }
+        return accessToPiece(expression,beforeMove,afterMove,beforeMoveIndexPiece,afterMoveIndexPiece,checkPlayer)
     }
 }

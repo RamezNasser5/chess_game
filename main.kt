@@ -1,5 +1,4 @@
 
-
 fun main() {
     //object chess from class Chess use to treat with chess form
     val chess = Chess()
@@ -44,6 +43,11 @@ fun main() {
                     println("Invalid Input")
                 }
             }
+            val afterMove = firstPlayerMove[3].code-48
+            if (afterMove == 8 || afterMove == 1){
+                println("Bye!")
+                break
+            }
         } else {
             println("$secondName's turn:")
 
@@ -63,6 +67,11 @@ fun main() {
                     println("Invalid Input")
                 }
             }
+        }
+        val afterMove = secondPlayerMove[3].code-48
+        if (afterMove == 8 || afterMove == 1){
+            println("Bye!")
+            break
         }
     }
 }

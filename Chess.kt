@@ -1,5 +1,4 @@
 import kotlin.math.abs
-
 class Chess {
 
     //this a mutable list to store a strings to draw chess form
